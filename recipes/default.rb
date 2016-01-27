@@ -16,3 +16,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require 'mixlib/shellout'
+
+rm = Mixlib::ShellOut.new("rm -fr /etc/yum.repos.d/ius.repo")
+rm.run_command
+puts rm.stdout
+puts rm.stderr
+
+clean = Mixlib::ShellOut.new("yum clean metadata")
+clean.run_command
+puts clean.stdout
+puts clean.stderr
+
+cache = Mixlib::ShellOut.new("yum -q -y makecache")
+cache.run_command
+puts cache.stdout
+puts cache.stderr
+
+r = ruby_block "yum-cache-reload-#{new_resource.repositoryid}" do
+  block { Chef::Provider::Package::Yum::YumCache.instance.reload }
+  action :nothing
+end
+
+r.run_action(:create)
