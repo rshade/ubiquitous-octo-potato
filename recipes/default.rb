@@ -33,7 +33,7 @@ cache.run_command
 puts cache.stdout
 puts cache.stderr
 
-r = ruby_block "yum-cache-reload-#{new_resource.repositoryid}" do
+r = ruby_block "yum-cache-reload" do
   block { Chef::Provider::Package::Yum::YumCache.instance.reload }
   action :nothing
 end
