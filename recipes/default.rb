@@ -18,7 +18,7 @@
 #
 require 'mixlib/shellout'
 
-rm = Mixlib::ShellOut.new("rm -fr /etc/yum.repos.d/ius.repo")
+rm = Mixlib::ShellOut.new("rm -fr /etc/yum.repos.d/*.repo")
 rm.run_command
 puts rm.stdout
 puts rm.stderr
