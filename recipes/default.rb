@@ -18,6 +18,11 @@
 #
 require 'mixlib/shellout'
 
+yum_conf=Mixlib::ShellOut.new("sed -i -e 's/centos-release/redhat-release/' /etc/yum.conf")
+yum_conf.run_command
+puts yum_conf.stdout
+puts yum_conf.stderr
+
 rm = Mixlib::ShellOut.new("rm -fr /etc/yum.repos.d/*.repo")
 rm.run_command
 puts rm.stdout
