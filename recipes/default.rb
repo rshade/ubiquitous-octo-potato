@@ -18,6 +18,11 @@
 #
 require 'mixlib/shellout'
 
+rm0 = Mixlib::ShellOut.new("rm -rf /etc/sysconfig/rhn/systemid")
+rm0.run_command
+Chef::Log.info rm0.stdout
+Chef::Log.info rm0.stderr
+
 yum_conf=Mixlib::ShellOut.new("sed -i -e 's/centos-release/redhat-release/' /etc/yum.conf")
 yum_conf.run_command
 puts yum_conf.stdout
