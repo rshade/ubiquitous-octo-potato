@@ -38,6 +38,57 @@ cache.run_command
 puts cache.stdout
 puts cache.stderr
 
+katello = Mixlib::ShellOut.new("yum install http://10.141.33.100/pub/katello-ca-consumer-latest.noarch.rpm -y")
+katello.run_command
+Chef::Log.info katello.stdout
+Chef::Log.info katello.stderr
+
+sm1 = Mixlib::ShellOut.new("subscription-manager register --org=\"#{node['yum-cleanup']['org']}\" --activationkey=\"RHEL 6 #{node['yum-cleanup']['key']} Virtual\"")
+sm1.run_command
+Chef::Log.info sm1.stdout
+Chef::Log.info sm1.stderr
+
+sm2 = Mixlib::ShellOut.new("subscription-manager subscribe --auto")
+sm2.run_command
+Chef::Log.info sm2.stdout
+Chef::Log.info sm2.stderr
+
+sm3 = Mixlib::ShellOut.new("subscription-manager repos --enable=rhel-6-server-rh-common-rpms")
+sm3.run_command
+Chef::Log.info sm3.stdout
+Chef::Log.info sm3.stderr
+
+sm4 = Mixlib::ShellOut.new("subscription-manager refresh")
+sm4.run_command
+Chef::Log.info sm4.stdout
+Chef::Log.info sm4.stderr
+
+yca = Mixlib::ShellOut.new("yum clean all")
+yca.run_command
+Chef::Log.info yca.stdout
+Chef::Log.info yca.stderr
+
+yka = Mixlib::ShellOut.new("yum install katello-agent -y")
+yka.run_command
+Chef::Log.info yka.stdout
+Chef::Log.info yka.stderr
+
+kpu = Mixlib::ShellOut.new("katello-package-upload")
+kpu.run_command
+Chef::Log.info kpu.stdout
+Chef::Log.info kpu.stderr
+
+chk = Mixlib::ShellOut.new("chkconfig goferd on")
+chk.run_command
+Chef::Log.info chk.stdout
+Chef::Log.info chk.stderr
+
+srv = Mixlib::ShellOut.new("service goferd start")
+srv.run_command
+Chef::Log.info srv.stdout
+Chef::Log.info srv.stderr
+
+
 r = ruby_block "yum-cache-reload" do
   block { Chef::Provider::Package::Yum::YumCache.instance.reload }
   action :nothing
